@@ -1,5 +1,4 @@
- package version3;
-
+package version3;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -1060,4 +1059,3 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
     }
 
 }
-

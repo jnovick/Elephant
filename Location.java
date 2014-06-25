@@ -1,5 +1,6 @@
 package version3;
 
+
 public class Location {
 
 	public static final int LEFT=270;
