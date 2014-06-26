@@ -25,6 +25,12 @@ public class Elephant extends Animal{
 	}
 
 	@Override
+	public void act(){
+		super.act();
+		if(canMove() && getGrid().contains(Water.class, getLocation()))
+			isThirsty=false;
+	}
+	@Override
 	public String toString() {
 		return "Elephant #"+elephantNumber+". Total steps = "+steps;
 	}
@@ -72,7 +78,7 @@ public class Elephant extends Animal{
 
 	@Override
 	protected double getRandomTurnFactorWeight() {
-		return 0.00;
+		return 0.1;
 	}
 	
 	@Override

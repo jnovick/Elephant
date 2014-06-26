@@ -56,6 +56,17 @@ public class Grid {
 		return occupants.contains(actor);
 	}
 
+	public boolean contains(Class<?> c, Location loc){
+		if(loc == null)
+			return false;
+		
+		for(Actor actor: occupants){
+			if(actor.isOnLocation(loc) && actor.getClass().equals(c))
+				return true;
+		}
+		return false;
+	}
+	
 	public Actor get(Location loc){
 		if(loc == null)
 			return null;

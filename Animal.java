@@ -97,7 +97,7 @@ public abstract class Animal extends Actor{
 		setDirection(getDirection()+angle);
 	}                                            
 	
-	private boolean canMove() {
+	protected boolean canMove() {
 		return getGrid()!=null && getLocation()!=null;
 	}
 

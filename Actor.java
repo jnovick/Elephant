@@ -67,7 +67,7 @@ public abstract class Actor {
 		else{
 			grid.remove(this);
 			Actor other = grid.get(loc);
-			if (other != null)
+			if (other != null && !(other instanceof Water))
 				other.removeSelfFromGrid();
 			location = loc;
 			grid.put(location, this);
