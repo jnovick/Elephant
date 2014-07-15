@@ -172,160 +172,11 @@ public class Grid {
 		return new Location((int)(loc.x/cellSize)*cellSize, (int)(loc.y/cellSize)*cellSize);
 	}
 
-	public void addOccurancesBetween(Location startLoc, Location endLoc, double radius) {	
-		if(startLoc.x==endLoc.x){
-			double increment=getCellSize();
-			double y1, y2;
-			if(startLoc.y<endLoc.y){
-				y1=startLoc.y;
-				y2=endLoc.y;
-			}
-			else{
-				y2=startLoc.y;
-				y1=endLoc.y;
-			}
-			double xc=startLoc.x;
-			for(double y=y1; y<y2; y+=increment){
-				for(double x=xc-radius; x<=xc+radius; x+=increment){
-					Location loc=roundToNearestCell(new Location(x,y));
-					if(loc.isWithinDistance(roundToNearestCell(startLoc), radius))
-						continue;
-					if(isValid(loc)){
-						addOccurance(loc);
-						if(displayGraphics)
-							eraseCell(loc);
-					}
-				}
-			}
+	public void addOccurancesBetween(Location startLoc, Location endLoc, double radius) {
+		PathThread p=new PathThread(this, startLoc, endLoc, radius);
+		p.start();
+	}
 
-			for(double y=y2; y<=y2+radius; y+=increment){
-				for(double x=xc-radius; x<=xc+radius; x+=increment){
-					Location loc=roundToNearestCell(new Location(x,y));
-					if(isValid(loc) && loc.isWithinDistance(roundToNearestCell(endLoc), radius) && !loc.isWithinDistance(roundToNearestCell(startLoc), radius)){
-						addOccurance(loc);
-						if(displayGraphics)
-							eraseCell(loc);
-					}
-				}
-			}
-		}
-		else if(startLoc.y==endLoc.y){
-			double increment=getCellSize();
-			double x1, x2;
-			if(startLoc.x<endLoc.x){
-				x1=startLoc.x;
-				x2=endLoc.x;
-			}
-			else{
-				x2=startLoc.x;
-				x1=endLoc.x;
-			}
-			double yc=startLoc.y;
-			for(double x=x1; x<x2; x+=increment){
-				for(double y=yc-radius; y<=yc+radius; y+=increment){
-					Location loc=roundToNearestCell(new Location(x,y));
-					if(loc.isWithinDistance(roundToNearestCell(startLoc), radius))
-						continue;
-					if(isValid(loc)){
-						addOccurance(loc);
-						if(displayGraphics)
-							eraseCell(loc);
-					}
-				}
-			}
-
-			for(double x=x2; x<=x2+radius; x+=increment){
-				for(double y=yc-radius; y<=yc+radius; y+=increment){
-					Location loc=roundToNearestCell(new Location(x,y));
-					if(isValid(loc) && loc.isWithinDistance(roundToNearestCell(endLoc), radius) && !loc.isWithinDistance(roundToNearestCell(startLoc), radius)){
-						addOccurance(loc);
-						if(displayGraphics)
-							eraseCell(loc);
-					}
-				}
-			}
-		}
-		else if(Math.abs(startLoc.y-endLoc.y)>Math.abs(startLoc.x-endLoc.x)){
-			double slope=(startLoc.x-endLoc.x)/(startLoc.y-endLoc.y);
-			double xint=startLoc.x-(slope*(startLoc.y));
-			double y1, y2;
-			if(startLoc.y<endLoc.y){
-				y1=startLoc.y;
-				y2=endLoc.y;
-			}
-			else{
-				y2=startLoc.y;
-				y1=endLoc.y;
-			}
-			double increment=getCellSize();
-			for(double y=y1; y<y2; y+=increment){
-				double xc=slope*y+xint;
-				for(double x=xc-radius; x<=xc+radius; x+=getCellSize()){
-					Location loc=roundToNearestCell(new Location(x,y));
-					if(loc.isWithinDistance(roundToNearestCell(startLoc), radius))
-						continue;
-					if(isValid(loc)){
-						addOccurance(loc);
-						if(displayGraphics)
-							eraseCell(loc);
-					}
-				}
-			}
-			
-			for(double y=y2; y<=y2+radius; y+=increment){
-				double xc=slope*y+xint;
-				for(double x=xc-radius; x<=xc+radius; x+=getCellSize()){
-					Location loc=roundToNearestCell(new Location(x,y));
-					if(isValid(loc) && loc.isWithinDistance(roundToNearestCell(endLoc), radius) && !loc.isWithinDistance(roundToNearestCell(startLoc), radius)){
-						addOccurance(loc);
-						if(displayGraphics)
-							eraseCell(loc);
-					}
-				}
-			}
-		}
-
-		else{
-			double slope=(startLoc.y-endLoc.y)/(startLoc.x-endLoc.x);
-			double yint=startLoc.y-(slope*(startLoc.x));
-			double x1, x2;
-			if(startLoc.x<endLoc.x){
-				x1=startLoc.x;
-				x2=endLoc.x;
-			}
-			else{
-				x2=startLoc.x;
-				x1=endLoc.x;
-			}
-			double increment=getCellSize();
-			for(double x=x1; x<x2; x+=increment){
-				double yc=slope*x+yint;
-				for(double y=yc-radius; y<=yc+radius; y+=getCellSize()){
-					Location loc=roundToNearestCell(new Location(x,y));
-					if(loc.isWithinDistance(roundToNearestCell(startLoc), radius))
-						continue;
-					if(isValid(loc)){
-						addOccurance(loc);
-						if(displayGraphics)
-							eraseCell(loc);
-					}
-				}
-			}
-			
-			for(double x=x2; x<=x2+radius; x+=increment){
-				double yc=slope*x+yint;
-				for(double y=yc-radius; y<=yc+radius; y+=getCellSize()){
-					Location loc=roundToNearestCell(new Location(x,y));
-					if(isValid(loc) && loc.isWithinDistance(roundToNearestCell(endLoc), radius) && !loc.isWithinDistance(roundToNearestCell(startLoc), radius)){
-						addOccurance(loc);
-						if(displayGraphics)
-							eraseCell(loc);
-					}
-				}
-			}
-		}
-		
-	}	
 	private void initializeDrawingCanvas() {
 		
 		StdDraw.setXscale(0, getLength());
@@ -438,5 +289,181 @@ public class Grid {
 		}
 		writer.close();
 		
+	}
+
+	public boolean willDisplayGraphics() {
+		return displayGraphics;
+	}
+}
+
+class PathThread extends Thread{
+
+	private Grid gr;
+	private Location startLoc;
+	private Location endLoc;
+	private double radius;
+
+	public PathThread(Grid gr, Location startLoc, Location endLoc, double radius) {
+		super();
+		this.gr=gr;
+		this.startLoc=startLoc;
+		this.endLoc=endLoc;
+		this.radius=radius;
+	}
+
+	public void run(){	
+		if(startLoc.x==endLoc.x){
+			double increment=gr.getCellSize();
+			double y1, y2;
+			if(startLoc.y<endLoc.y){
+				y1=startLoc.y;
+				y2=endLoc.y;
+			}
+			else{
+				y2=startLoc.y;
+				y1=endLoc.y;
+			}
+			double xc=startLoc.x;
+			for(double y=y1; y<y2; y+=increment){
+				for(double x=xc-radius; x<=xc+radius; x+=increment){
+					Location loc=gr.roundToNearestCell(new Location(x,y));
+					if(loc.isWithinDistance(gr.roundToNearestCell(startLoc), radius))
+						continue;
+					if(gr.isValid(loc)){
+						gr.addOccurance(loc);
+						if(gr.willDisplayGraphics())
+							gr.eraseCell(loc);
+					}
+				}
+			}
+
+			for(double y=y2; y<=y2+radius; y+=increment){
+				for(double x=xc-radius; x<=xc+radius; x+=increment){
+					Location loc=gr.roundToNearestCell(new Location(x,y));
+					if(gr.isValid(loc) && loc.isWithinDistance(gr.roundToNearestCell(endLoc), radius) && !loc.isWithinDistance(gr.roundToNearestCell(startLoc), radius)){
+						gr.addOccurance(loc);
+						if(gr.willDisplayGraphics())
+							gr.eraseCell(loc);
+					}
+				}
+			}
+		}
+		else if(startLoc.y==endLoc.y){
+			double increment=gr.getCellSize();
+			double x1, x2;
+			if(startLoc.x<endLoc.x){
+				x1=startLoc.x;
+				x2=endLoc.x;
+			}
+			else{
+				x2=startLoc.x;
+				x1=endLoc.x;
+			}
+			double yc=startLoc.y;
+			for(double x=x1; x<x2; x+=increment){
+				for(double y=yc-radius; y<=yc+radius; y+=increment){
+					Location loc=gr.roundToNearestCell(new Location(x,y));
+					if(loc.isWithinDistance(gr.roundToNearestCell(startLoc), radius))
+						continue;
+					if(gr.isValid(loc)){
+						gr.addOccurance(loc);
+						if(gr.willDisplayGraphics())
+							gr.eraseCell(loc);
+					}
+				}
+			}
+
+			for(double x=x2; x<=x2+radius; x+=increment){
+				for(double y=yc-radius; y<=yc+radius; y+=increment){
+					Location loc=gr.roundToNearestCell(new Location(x,y));
+					if(gr.isValid(loc) && loc.isWithinDistance(gr.roundToNearestCell(endLoc), radius) && !loc.isWithinDistance(gr.roundToNearestCell(startLoc), radius)){
+						gr.addOccurance(loc);
+						if(gr.willDisplayGraphics())
+							gr.eraseCell(loc);
+					}
+				}
+			}
+		}
+		else if(Math.abs(startLoc.y-endLoc.y)>Math.abs(startLoc.x-endLoc.x)){
+			double slope=(startLoc.x-endLoc.x)/(startLoc.y-endLoc.y);
+			double xint=startLoc.x-(slope*(startLoc.y));
+			double y1, y2;
+			if(startLoc.y<endLoc.y){
+				y1=startLoc.y;
+				y2=endLoc.y;
+			}
+			else{
+				y2=startLoc.y;
+				y1=endLoc.y;
+			}
+			double increment=gr.getCellSize();
+			for(double y=y1; y<y2; y+=increment){
+				double xc=slope*y+xint;
+				for(double x=xc-radius; x<=xc+radius; x+=gr.getCellSize()){
+					Location loc=gr.roundToNearestCell(new Location(x,y));
+					if(loc.isWithinDistance(gr.roundToNearestCell(startLoc), radius))
+						continue;
+					if(gr.isValid(loc)){
+						gr.addOccurance(loc);
+						if(gr.willDisplayGraphics())
+							gr.eraseCell(loc);
+					}
+				}
+			}
+
+			for(double y=y2; y<=y2+radius; y+=increment){
+				double xc=slope*y+xint;
+				for(double x=xc-radius; x<=xc+radius; x+=gr.getCellSize()){
+					Location loc=gr.roundToNearestCell(new Location(x,y));
+					if(gr.isValid(loc) && loc.isWithinDistance(gr.roundToNearestCell(endLoc), radius) && !loc.isWithinDistance(gr.roundToNearestCell(startLoc), radius)){
+						gr.addOccurance(loc);
+						if(gr.willDisplayGraphics())
+							gr.eraseCell(loc);
+					}
+				}
+			}
+		}
+
+		else{
+			double slope=(startLoc.y-endLoc.y)/(startLoc.x-endLoc.x);
+			double yint=startLoc.y-(slope*(startLoc.x));
+			double x1, x2;
+			if(startLoc.x<endLoc.x){
+				x1=startLoc.x;
+				x2=endLoc.x;
+			}
+			else{
+				x2=startLoc.x;
+				x1=endLoc.x;
+			}
+			double increment=gr.getCellSize();
+			for(double x=x1; x<x2; x+=increment){
+				double yc=slope*x+yint;
+				for(double y=yc-radius; y<=yc+radius; y+=gr.getCellSize()){
+					Location loc=gr.roundToNearestCell(new Location(x,y));
+					if(loc.isWithinDistance(gr.roundToNearestCell(startLoc), radius))
+						continue;
+					if(gr.isValid(loc)){
+						gr.addOccurance(loc);
+						if(gr.willDisplayGraphics())
+							gr.eraseCell(loc);
+					}
+				}
+			}
+
+			for(double x=x2; x<=x2+radius; x+=increment){
+				double yc=slope*x+yint;
+				for(double y=yc-radius; y<=yc+radius; y+=gr.getCellSize()){
+					Location loc=gr.roundToNearestCell(new Location(x,y));
+					if(gr.isValid(loc) && loc.isWithinDistance(gr.roundToNearestCell(endLoc), radius) && !loc.isWithinDistance(gr.roundToNearestCell(startLoc), radius)){
+						gr.addOccurance(loc);
+						if(gr.willDisplayGraphics())
+							gr.eraseCell(loc);
+					}
+				}
+			}
+		}
+
+
 	}
 }

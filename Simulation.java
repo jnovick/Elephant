@@ -8,10 +8,10 @@ import version3a.Water;
 public class Simulation {
 
 	public static void main(String[] args) {
-		Grid grid=new Grid(100, 100, 0.5, false);
+		Grid grid=new Grid(100, 100, 0.25, false);
 		Water lake=new Water(5);
 		lake.putSelfInGrid(new Location(70, 80), grid);
-		for(int i=0; i<2; i++){
+		for(int i=0; i<3; i++){
 			for(int j=0; j<3; j++){
 			Elephant e=new Elephant();
 //			Location loc=grid.getRandomLocationOnGrid();
@@ -33,9 +33,9 @@ public class Simulation {
 			grid.step();
 //			System.out.println(i++);
 		}
-		System.out.println(grid);
+		System.out.println(grid+"\n\nV4B");
 		grid.reDraw();
-		grid.save();
 		grid.displayGraphics();
+		grid.save();
 	}
 }
