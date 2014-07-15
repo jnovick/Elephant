@@ -2,7 +2,11 @@ package version3;
 
 
 import java.awt.Color;
+import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Grid {
 	private static final int DEFAULT_SIZE=50;
@@ -409,5 +413,29 @@ public class Grid {
 	
 	public void hideGraphics(){
 		displayGraphics=false;
+	}
+	
+	public void save(){
+		DateFormat dateFormat = new SimpleDateFormat("HH.mm.ss yyyy.MM.dd");
+		Date date = new Date();
+		String day=dateFormat.format(date);
+		save(day);
+	}
+
+	public void save(String saveName) {
+		PrintWriter writer=null;
+		try {
+			writer = new PrintWriter("C:\\Users\\Joshua Account\\SkyDrive\\Research\\Results\\Version 3A saveFiles\\"+saveName+".txt", "UTF-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		for(int i=numOccurances.length-1; i>=0; i--){
+			for(int j=0; j<numOccurances[i].length; j++){
+				writer.print(numOccurances[i][j]+" ");
+			}
+			writer.println();
+		}
+		writer.close();
+		
 	}
 }
