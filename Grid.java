@@ -331,6 +331,7 @@ public class Grid {
 		StdDraw.setXscale(0, getLength());
 		StdDraw.setYscale(0, getHeight());
 		StdDraw.clear(BACKGROUND_COLOR);
+		graphicsInitialized=true;
 		
 	}
 
