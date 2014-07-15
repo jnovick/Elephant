@@ -17,14 +17,19 @@ public class Grid {
 	private int[][] numOccurances;
 	private double cellSize;
 
+	private boolean displayGraphics;
+	private boolean graphicsInitialized=false;
+	
 	public Grid(){
-		this(DEFAULT_SIZE, DEFAULT_SIZE, DEFAULT_CELL_SIZE);
+		this(DEFAULT_SIZE, DEFAULT_SIZE, DEFAULT_CELL_SIZE, true);
 	}
 
-	public Grid(int height, int length, double cellSize){
+	public Grid(int height, int length, double cellSize, boolean displayGraphics){
+		this.displayGraphics=displayGraphics;
 		this.cellSize=cellSize;
 		numOccurances=new int[(int)(height/cellSize)][(int)(length/cellSize)];
-		initializeDrawingCanvas();
+		if(displayGraphics)
+			initializeDrawingCanvas();
 		occupants=new ArrayList<Actor>();
 	}
 
@@ -183,7 +188,8 @@ public class Grid {
 						continue;
 					if(isValid(loc)){
 						addOccurance(loc);
-						eraseCell(loc);
+						if(displayGraphics)
+							eraseCell(loc);
 					}
 				}
 			}
@@ -193,7 +199,8 @@ public class Grid {
 					Location loc=roundToNearestCell(new Location(x,y));
 					if(isValid(loc) && loc.isWithinDistance(roundToNearestCell(endLoc), radius) && !loc.isWithinDistance(roundToNearestCell(startLoc), radius)){
 						addOccurance(loc);
-						eraseCell(loc);
+						if(displayGraphics)
+							eraseCell(loc);
 					}
 				}
 			}
@@ -217,7 +224,8 @@ public class Grid {
 						continue;
 					if(isValid(loc)){
 						addOccurance(loc);
-						eraseCell(loc);
+						if(displayGraphics)
+							eraseCell(loc);
 					}
 				}
 			}
@@ -227,7 +235,8 @@ public class Grid {
 					Location loc=roundToNearestCell(new Location(x,y));
 					if(isValid(loc) && loc.isWithinDistance(roundToNearestCell(endLoc), radius) && !loc.isWithinDistance(roundToNearestCell(startLoc), radius)){
 						addOccurance(loc);
-						eraseCell(loc);
+						if(displayGraphics)
+							eraseCell(loc);
 					}
 				}
 			}
@@ -253,7 +262,8 @@ public class Grid {
 						continue;
 					if(isValid(loc)){
 						addOccurance(loc);
-						eraseCell(loc);
+						if(displayGraphics)
+							eraseCell(loc);
 					}
 				}
 			}
@@ -264,7 +274,8 @@ public class Grid {
 					Location loc=roundToNearestCell(new Location(x,y));
 					if(isValid(loc) && loc.isWithinDistance(roundToNearestCell(endLoc), radius) && !loc.isWithinDistance(roundToNearestCell(startLoc), radius)){
 						addOccurance(loc);
-						eraseCell(loc);
+						if(displayGraphics)
+							eraseCell(loc);
 					}
 				}
 			}
@@ -291,7 +302,8 @@ public class Grid {
 						continue;
 					if(isValid(loc)){
 						addOccurance(loc);
-						eraseCell(loc);
+						if(displayGraphics)
+							eraseCell(loc);
 					}
 				}
 			}
@@ -302,13 +314,14 @@ public class Grid {
 					Location loc=roundToNearestCell(new Location(x,y));
 					if(isValid(loc) && loc.isWithinDistance(roundToNearestCell(endLoc), radius) && !loc.isWithinDistance(roundToNearestCell(startLoc), radius)){
 						addOccurance(loc);
-						eraseCell(loc);
+						if(displayGraphics)
+							eraseCell(loc);
 					}
 				}
 			}
 		}
 		
-	}
+	}	
 	private void initializeDrawingCanvas() {
 		
 		StdDraw.setXscale(0, getLength());
@@ -318,39 +331,45 @@ public class Grid {
 	}
 
 	public void drawCell(Location loc, Color color){
-		
-		StdDraw.setPenColor(color);
-		StdDraw.filledSquare((int)(loc.x/cellSize)*cellSize, (int)(loc.y/cellSize)*cellSize, cellSize);
-		StdDraw.show(delayDisplayTime); 
+
+		if(displayGraphics){
+			StdDraw.setPenColor(color);
+			StdDraw.filledSquare((int)(loc.x/cellSize)*cellSize, (int)(loc.y/cellSize)*cellSize, cellSize);
+			StdDraw.show(delayDisplayTime); 
+		}
 		
 	}
 
 	public void eraseCell(Location loc){
 		
-		int n=(int)Math.max(0, 255-darkeningFactor*getNumOccurances(loc)-darkeningConstant);
-		drawCell(loc, new Color(n, n, n)); 
+		if(displayGraphics){
+			int n=(int)Math.max(0, 255-darkeningFactor*getNumOccurances(loc)-darkeningConstant);
+			drawCell(loc, new Color(n, n, n)); 
+		}
 		
 	}
 
 	public void reDraw() {
-		int temp=delayDisplayTime;
-		delayDisplayTime=0;
-		StdDraw.clear(BACKGROUND_COLOR);
-		if(getMaxNumberOccurances()!=getMinNumberOccurances())
-			darkeningFactor=255/(getMaxNumberOccurances()-getMinNumberOccurances());
-		darkeningConstant=getMinNumberOccurances()*darkeningFactor;
-		ArrayList<Location> occupied=getOccupiedCellLocations();
-		ArrayList<Location> empty=getEmptyCellLocations();
-		for(Location loc: occupied){
-			get(loc).draw();
+		if(displayGraphics){
+			int temp=delayDisplayTime;
+			delayDisplayTime=0;
+			StdDraw.clear(BACKGROUND_COLOR);
+			int max=getMaxNumberOccurances();
+			int min=getMinNumberOccurances();
+			double cellSize=getCellSize();
+			if(max!=min)
+				darkeningFactor=255/(max-min);
+			darkeningConstant=min*darkeningFactor;
+			for(int i=0; i<numOccurances.length; i++)
+				for(int j=0; j<numOccurances[i].length; j++){
+					Location loc=new Location(j*cellSize,i*cellSize);
+					eraseCell(loc);
+				}
+			for(Actor actor: occupants)
+				actor.draw();
+			delayDisplayTime=temp;
 		}
-	
-		for(Location loc: empty){
-			eraseCell(loc);
-		}
-		delayDisplayTime=temp;
 	}
-
 
 	public int getMaxNumberOccurances(){
 		int max=numOccurances[0][0];
@@ -377,5 +396,18 @@ public class Grid {
 			str+="\n";
 		}
 		return str;
+	}
+	
+	public void displayGraphics(){
+		if(displayGraphics)
+			return;
+		displayGraphics=true;
+		if(!graphicsInitialized)
+			initializeDrawingCanvas();
+		reDraw();
+	}
+	
+	public void hideGraphics(){
+		displayGraphics=false;
 	}
 }
