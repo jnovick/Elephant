@@ -164,39 +164,6 @@ public class Grid {
 	}
 
 	public void addOccurancesBetween(Location startLoc, Location endLoc, double radius) {
-		/*
-		double angle = startLoc.getAngleTo(endLoc);
-		ArrayList<Location> alreadyCounted=getGridCellLocationsWithinDistance(radius, startLoc);
-		double totalDist=startLoc.distanceTo(endLoc);
-		double xCenter, yCenter;
-		for(double dist=0; dist<totalDist+cellSize; dist+=cellSize){
-			if(totalDist<dist)
-				dist=totalDist;
-			xCenter=startLoc.x + dist * Math.cos(angle);
-			yCenter=startLoc.y + dist * Math.sin(angle);
-			for(double ang=angle-Math.PI/2; ang<angle+Math.PI/2; ang+=Math.PI/(radius*5)*cellSize){
-				double x=xCenter + radius * Math.cos(ang);
-				double y=yCenter + radius * Math.sin(ang);
-				Location loc=new Location(x,y);
-				loc=roundToNearestCell(loc);
-				if(isValid(loc) && !alreadyCounted.contains(loc)){
-					addOccurance(loc);
-					eraseCell(loc);
-					alreadyCounted.add(loc);
-				}
-			}
-			
-			for(double ang=angle+Math.PI/2; ang<angle+3*Math.PI/2; ang+=Math.PI/(radius*5)*cellSize){
-				double x=xCenter + radius * Math.cos(ang);
-				double y=yCenter + radius * Math.sin(ang);
-				Location loc=new Location(x,y);
-				if(isValid(loc)){
-					eraseCell(loc);
-				}
-			}
-		}
-*/
-
 		double increment=getCellSize();
 		if(startLoc.x==endLoc.x){
 			double y1, y2;
@@ -302,6 +269,7 @@ public class Grid {
 		}
 		delayDisplayTime=temp;
 	}
+
 
 	public int getMaxNumberOccurances(){
 		int max=numOccurances[0][0];
