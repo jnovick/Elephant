@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import version3.StdDraw;
+
 public class Grid {
 	private static final int DEFAULT_SIZE=50;
 	protected static final Color BACKGROUND_COLOR = Color.WHITE;
@@ -275,9 +277,10 @@ public class Grid {
 	}
 
 	public void save(String saveName) {
+		saveName="C:\\Users\\Joshua Account\\SkyDrive\\Research\\Results\\Version 3A saveFiles\\"+saveName;
 		PrintWriter writer=null;
 		try {
-			writer = new PrintWriter("C:\\Users\\Joshua Account\\SkyDrive\\Research\\Results\\Version 3A saveFiles\\"+saveName+".txt", "UTF-8");
+			writer = new PrintWriter(saveName+".txt", "UTF-8");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -288,7 +291,8 @@ public class Grid {
 			writer.println();
 		}
 		writer.close();
-		
+		if(displayGraphics)
+			StdDraw.save(saveName+".png");
 	}
 
 	public boolean willDisplayGraphics() {
