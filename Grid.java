@@ -46,6 +46,10 @@ public class Grid {
 		return false;
 	}
 	
+	public int[][] getNumOccurances() {
+		return numOccurances;
+	}
+	
 	public int getNumOccurances(Location loc) {
 		return numOccurances[(int)(loc.y/cellSize)][(int)(loc.x/cellSize)];
 	}
