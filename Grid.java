@@ -223,12 +223,8 @@ public class Grid {
 			int temp=delayDisplayTime;
 			delayDisplayTime=0;
 			StdDraw.clear(BACKGROUND_COLOR);
-			int max=getMaxNumberOccurances();
-			int min=getMinNumberOccurancesrecalculateDarkeningFactor();
+			recalculateDarkeningFactor();
 			double cellSize=getCellSize();
-			if(max!=min)
-				darkeningFactor=255/(max-min);
-			darkeningConstant=min*darkeningFactor;
 			for(int i=0; i<numOccurances.length; i++)
 				for(int j=0; j<numOccurances[i].length; j++){
 					Location loc=new Location(j*cellSize,i*cellSize);
@@ -239,6 +235,7 @@ public class Grid {
 			delayDisplayTime=temp;
 		}
 	}
+
 
 
 	public int getMaxNumberOccurances(){
