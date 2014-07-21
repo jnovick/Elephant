@@ -210,13 +210,21 @@ public class Grid {
 		
 	}
 
+	public void recalculateDarkeningFactor(){
+		int max=getMaxNumberOccurances();
+		int min=getMinNumberOccurances();
+		if(max!=min)
+			darkeningFactor=255/(max-min);
+		darkeningConstant=min*darkeningFactor;
+	}
+	
 	public void reDraw() {
 		if(displayGraphics){
 			int temp=delayDisplayTime;
 			delayDisplayTime=0;
 			StdDraw.clear(BACKGROUND_COLOR);
 			int max=getMaxNumberOccurances();
-			int min=getMinNumberOccurances();
+			int min=getMinNumberOccurancesrecalculateDarkeningFactor();
 			double cellSize=getCellSize();
 			if(max!=min)
 				darkeningFactor=255/(max-min);
@@ -231,6 +239,7 @@ public class Grid {
 			delayDisplayTime=temp;
 		}
 	}
+
 
 	public int getMaxNumberOccurances(){
 		int max=numOccurances[0][0];
